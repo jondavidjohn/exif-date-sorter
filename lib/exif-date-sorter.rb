@@ -1,4 +1,3 @@
-require 'rubygems'
 require "exif-date-sorter/version"
 require "exifr"
 require "fileutils"
@@ -8,14 +7,23 @@ class ExifDateSorter
     @source = source
     @target = target
     @video_dir = "#{@target}/Videos"
+    @unsortable_dir = #{@target}/Unsortable"
     FileUtils.mkdir_p(@video_dir)
+    FileUtils.mkdir_p(@unsortable_dir)
   end
 
   def move
+    puts "Starting Photo Organization..."
     Dir[@source + '/**/*.{jpg,JPG,jpeg,JPEG}'].each do |image|
       target_dir = dir(image)
-      FileUtils.mkdir_p(target_dir) unless File.directory? target_dir
-      FileUtils.move image, target_dir
+      if target_dir
+        puts "  Sorting #{image}"
+        FileUtils.mkdir_p(target_dir) unless File.directory? target_dir
+        FileUtils.move image, target_dir
+      else
+        puts "  Unsortable #{image}"
+        FileUtils.move image, @unsortable_dir
+      end
     end
 
 
@@ -30,6 +38,10 @@ class ExifDateSorter
 
   def dir(image)
     date = date(image)
-    "#{@target}/#{date.year}/#{'%02d' % date.month}"
+    if date
+      return "#{@target}/#{date.year}/#{'%02d' % date.month}"
+    else
+      return false
+    end
   end
 end
