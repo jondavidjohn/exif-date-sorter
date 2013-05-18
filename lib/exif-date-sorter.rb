@@ -14,6 +14,7 @@ class ExifDateSorter
   end
 
   def move
+    STDOUT.sync = true
     puts "Starting Photo Organization..."
     Dir[@source + '/*/'].each do |subdir|
       subdir = File.expand_path subdir
