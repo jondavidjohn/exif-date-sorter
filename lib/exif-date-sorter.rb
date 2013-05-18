@@ -30,22 +30,22 @@ class ExifDateSorter
             FileUtils.move image, File.join(target_dir, SecureRandom.hex(4) + File.basename(image))
           end
         end
+      end
 
-        Dir[subdir + '/**/*.{mov,MOV,avi,AVI,mp4,MP4}'].each do |video|
-          puts "    Image #{File.basename(video)} to #{@video_dir}"
-          if !File.file? File.join(@video_dir, File.basename(video))
-            FileUtils.move video, @video_dir
-          else
-            FileUtils.move video, File.join(@video_dir, SecureRandom.hex(4) + File.basename(video))
-          end
+      Dir[subdir + '/**/*.{mov,MOV,avi,AVI,mp4,MP4}'].each do |video|
+        puts "    Image #{File.basename(video)} to #{@video_dir}"
+        if !File.file? File.join(@video_dir, File.basename(video))
+          FileUtils.move video, @video_dir
+        else
+          FileUtils.move video, File.join(@video_dir, SecureRandom.hex(4) + File.basename(video))
         end
+      end
 
-        if Dir.entries(subdir).size
-          if !File.directory? File.join(@unsortable_dir, File.basename(subdir))
-            FileUtils.move subdir, @unsortable_dir
-          else
-            FileUtils.move subdir, File.join(@unsortable_dir, SecureRandom.hex(4) + File.basename(subdir))
-          end
+      if Dir.entries(subdir).size
+        if !File.directory? File.join(@unsortable_dir, File.basename(subdir))
+          FileUtils.move subdir, @unsortable_dir
+        else
+          FileUtils.move subdir, File.join(@unsortable_dir, SecureRandom.hex(4) + File.basename(subdir))
         end
       end
     end
